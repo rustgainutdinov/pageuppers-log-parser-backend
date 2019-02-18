@@ -1,0 +1,69 @@
+brew update
+brew install postgres
+initdb -D /usr/local/var/postgres
+pg_ctl -D /usr/local/var/postgres -l logfile start
+
+
+### page-uppers
+
+##users
+
+CREATE TABLE access_rights(
+    access_rights_id UUID DEFAULT uuid_generate_v4 () primary key,
+    access_right INT
+);
+
+CREATE TABLE users(
+    users_id UUID DEFAULT uuid_generate_v4 () primary key,
+    name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    pass VARCHAR(255) NOT NULL,
+    access_rights_id UUID references access_rights(access_rights_id) DEFAULT NULL,
+    auth_token UUID DEFAULT NULL
+);
+
+CREATE TABLE wish_list(
+    wish_list_id UUID DEFAULT uuid_generate_v4 () primary key,
+    users_id UUID references users(users_id) DEFAULT NULL,
+    date_time TIMESTAMP DEFAULT NULL
+);
+
+CREATE TABLE black_list(
+    black_list_id UUID DEFAULT uuid_generate_v4 () primary key,
+    users_id UUID references users(users_id) DEFAULT NULL,
+    date_time TIMESTAMP DEFAULT NULL
+);
+
+CREATE TABLE domains(
+    domains_id UUID DEFAULT uuid_generate_v4 () primary key,
+    domain VARCHAR(255) UNIQUE,
+    black_list_id UUID references black_list(black_list_id) DEFAULT NULL,
+    wish_list_id UUID references wish_list(wish_list_id) DEFAULT NULL
+);
+
+CREATE TABLE urls(
+    urls_id UUID DEFAULT uuid_generate_v4 () primary key,
+    domains_id UUID references domains(domains_id) DEFAULT NULL,
+    url VARCHAR(1024) DEFAULT NULL,
+    ip VARCHAR(255) DEFAULT NULL,
+    robot BOOLEAN DEFAULT NULL,
+    cms VARCHAR(255) DEFAULT NULL,
+    load_time REAL DEFAULT NULL,
+    ttfb REAL DEFAULT NULL,
+    bytes INT DEFAULT NULL,
+    http_2 BOOLEAN DEFAULT NULL,
+    location VARCHAR(255) DEFAULT NULL,
+    browser VARCHAR(255) DEFAULT NULL,
+    wpt_id VARCHAR(255) DEFAULT NULL,
+    cdn BOOLEAN DEFAULT NULL,
+    date_time TIMESTAMP DEFAULT NULL
+);
+
+DROP TABLE urls, domains, wish_list, black_list, users, access_rights;
+DELETE FROM domains;
+ALTER TABLE wish_list ADD COLUMN date_time TIMESTAMP DEFAULT NULL;
+ALTER TABLE black_list ADD COLUMN date_time TIMESTAMP DEFAULT NULL;
+ALTER TABLE urls ADD CONSTRAINT domain UNIQUE USING INDEX domain;
+ALTER TABLE urls ADD COLUMN wpt_id VARCHAR(255) UNIQUE NOT NULL;
+ALTER TABLE urls DROP COLUMN wpt_id;
