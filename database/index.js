@@ -6,7 +6,7 @@ let db;
 
 db = new pg.Client(connection);
 db.connect((err, client) => {
-  if (err) return cb(err);
+  if (err) return err;
 });
 
 function execute(query, data, accessRights, cb) {
