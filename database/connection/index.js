@@ -1,8 +1,8 @@
 const connect = {
-  user: 'postgres',
+  user: 'pu-manager-user',
   host: 'localhost',
-  database: 'page-uppers',
-  password: 'G5i2V2p6',//gv9y3ytsow
+  database: 'pu-manager-db',
+  password: 'kjDf9434gsJK5698',//gv9y3ytsow
   port: 5432
 };
 
