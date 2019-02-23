@@ -54,6 +54,12 @@ const queries = {
       (?(domainsId), ?(domain))`,
     accessRight: 500
   },
+  'update-url-log': {
+		sql:
+			`UPDATE urls
+			SET ip = ?(ip), location = ?(location), browser = ?(browser), wpt_id = ?(wptId), date_time = ?(dateTime), counter = ?(counter)
+			WHERE urls_id = ?(urlsId);`,
+  },
   'insert-url': {
     sql:
       `INSERT 
@@ -79,11 +85,17 @@ const queries = {
   'get-urls-by-date': {
     sql:
       `SELECT
-      urls_id AS id, domain, url, ip, robot, cms, wpt_id as wptId, load_time AS loadTime, ttfb, bytes, http_2 AS http2, location, browser, cdn, date_time
+      urls_id AS id, domain, url, ip, robot, cms, wpt_id as wptId, load_time AS loadTime, ttfb, bytes, http_2 AS http2, location, browser, cdn, date_time, counter
       FROM urls
       INNER JOIN domains ON domains.domains_id = urls.domains_id
       WHERE date_time >= ?(startDate) AND date_time < ?(endDate)`,
     accessRight: 500
+  },
+  'find-url': {
+    sql:
+      `SELECT urls_id, counter
+      FROM urls 
+      WHERE url = ?(url) AND date_time >= ?(startDate) AND date_time < ?(endDate)`
   }
 };
 

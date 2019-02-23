@@ -35,7 +35,7 @@ function execute(req, res, next) {
       if (err) return next(err);
 
       if (Number(result[0].count) === 0) {
-        parse(data.date.replace(/-/ig, ''), (err) => {
+        parse(data.date.replace(/-/ig, ''), startEndDate, (err) => {
           if (err) return next(err);
         });
         return res.status(200).json({message: 'wait'});

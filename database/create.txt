@@ -57,7 +57,8 @@ CREATE TABLE urls(
     browser VARCHAR(255) DEFAULT NULL,
     wpt_id VARCHAR(255) DEFAULT NULL,
     cdn BOOLEAN DEFAULT NULL,
-    date_time TIMESTAMP DEFAULT NULL
+    date_time TIMESTAMP DEFAULT NULL,
+    counter INT DEFAULT 1
 );
 
 DROP TABLE urls, domains, wish_list, black_list, users, access_rights;
