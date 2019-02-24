@@ -67,7 +67,7 @@ function workWithUrl(reg, startEndDate, cb) {
 
 
 function parseLogs(wptPath, startEndDate, cb) {
-	path = __dirname + '/../../logs/' + wptPath + '.log';
+	path = __dirname + '/../../lists/' + wptPath + '.log';
 	var file = fs.createWriteStream(path);
 	http.get('http://webpagetest.org/logs/' + wptPath + '.log', function (response) {
 		response.pipe(file);
