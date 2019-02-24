@@ -1,8 +1,8 @@
 const connect = {
-  user: 'pu-manager-user',
+  user: process.env.NODE_ENV === 'production' ? 'pu-manager-user' : 'postgres',//postgres
   host: 'localhost',
-  database: 'pu-manager-db',
-  password: 'kjDf9434gsJK5698',//gv9y3ytsow
+  database: process.env.NODE_ENV === 'production' ? 'pu-manager-db' : 'page-uppers' ,//page-uppers
+  password: process.env.NODE_ENV === 'production' ? 'kjDf9434gsJK5698' : 'gv9y3ytsow',//gv9y3ytsow
   port: 5432
 };
 
