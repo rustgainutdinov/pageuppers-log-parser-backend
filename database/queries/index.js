@@ -96,6 +96,14 @@ const queries = {
       `SELECT urls_id, counter
       FROM urls 
       WHERE url = ?(url) AND date_time >= ?(startDate) AND date_time < ?(endDate)`
+  },
+  'load-all-logs-count': {
+    sql:
+      `SELECT 
+      DATE(date_time), COUNT(urls_id) 
+      FROM urls 
+      GROUP BY DATE(date_time);`,
+		accessRight: 500
   }
 };
 
