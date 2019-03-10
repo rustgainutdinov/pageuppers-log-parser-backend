@@ -23,29 +23,26 @@ CREATE TABLE users(
     auth_token UUID DEFAULT NULL
 );
 
-CREATE TABLE wish_list(
-    wish_list_id UUID DEFAULT uuid_generate_v4 () primary key,
-    users_id UUID references users(users_id) DEFAULT NULL,
-    date_time TIMESTAMP DEFAULT NULL
-);
-
-CREATE TABLE black_list(
-    black_list_id UUID DEFAULT uuid_generate_v4 () primary key,
-    users_id UUID references users(users_id) DEFAULT NULL,
-    date_time TIMESTAMP DEFAULT NULL
-);
-
 CREATE TABLE domains(
     domains_id UUID DEFAULT uuid_generate_v4 () primary key,
-    domain VARCHAR(255) UNIQUE,
-    black_list_id UUID references black_list(black_list_id) DEFAULT NULL,
-    wish_list_id UUID references wish_list(wish_list_id) DEFAULT NULL
+    domain VARCHAR(255) UNIQUE
+);
+
+CREATE TABLE load_log(
+	load_log_id UUID DEFAULT uuid_generate_v4 () primary key,
+	load_date TIMESTAMP DEFAULT NOW(),
+	date TIMESTAMP DEFAULT NULL,
+	api_tests INT DEFAULT NULL,
+	uniq_tests INT DEFAULT NULL,
+	total_tests INT DEFAULT NULL
 );
 
 CREATE TABLE urls(
     urls_id UUID DEFAULT uuid_generate_v4 () primary key,
     domains_id UUID references domains(domains_id) DEFAULT NULL,
-    url VARCHAR(1024) DEFAULT NULL,
+    load_log_id UUID references load_log(load_log_id) DEFAULT NULL,
+    date_time TIMESTAMP DEFAULT NULL,
+    url VARCHAR(4096) DEFAULT NULL,
     ip VARCHAR(255) DEFAULT NULL,
     robot BOOLEAN DEFAULT NULL,
     cms VARCHAR(255) DEFAULT NULL,
@@ -57,17 +54,47 @@ CREATE TABLE urls(
     browser VARCHAR(255) DEFAULT NULL,
     wpt_id VARCHAR(255) DEFAULT NULL,
     cdn BOOLEAN DEFAULT NULL,
-    date_time TIMESTAMP DEFAULT NULL,
-    counter INT DEFAULT 1
+    counter INT DEFAULT 1,
+    api BOOLEAN DEFAULT NULL
+);
+
+CREATE TABLE wish_list(
+    wish_list_id UUID DEFAULT uuid_generate_v4 () primary key,
+    domains_id UUID references domains(domains_id) DEFAULT NULL,
+    users_id UUID references users(users_id) DEFAULT NULL,
+    date_time TIMESTAMP DEFAULT NULL
+);
+
+CREATE TABLE black_list(
+    black_list_id UUID DEFAULT uuid_generate_v4 () primary key,
+    domains_id UUID references domains(domains_id) DEFAULT NULL,
+    users_id UUID references users(users_id) DEFAULT NULL,
+    date_time TIMESTAMP DEFAULT NULL
+);
+
+CREATE TABLE status_type(
+	status_type_id UUID DEFAULT uuid_generate_v4 () primary key,
+	name VARCHAR(255)
+);
+
+CREATE TABLE status(
+	status_id UUID DEFAULT uuid_generate_v4 () primary key,
+	status_type_id UUID references status_type(status_type_id) DEFAULT NULL,
+	users_id UUID references users(users_id) DEFAULT NULL,
+	domains_id UUID references domains(domains_id) DEFAULT NULL
 );
 
 INSERT INTO access_rights(access_rights_id, access_right) VALUES ('e7a1ad57-f885-4143-99cc-7b99f0a97d7b', '500');
 INSERT INTO users(access_rights_id, name, last_name, email, pass, auth_token) VALUES ('e7a1ad57-f885-4143-99cc-7b99f0a97d7b', 'Rustam', 'Gainutdonov', 'email@mail.com', 'sha1$864ee86d$1$2cf4bbeba889addf708bc12807702777db9195b4', 'ff874805-f05e-45c9-b9e5-2c2d6ff8c20f')
 
-DROP TABLE urls, domains, wish_list, black_list, users, access_rights;
-DELETE FROM domains;
+DROP TABLE status, status_type, black_list, wish_list, urls, load_log, domains;
+DELETE FROM domains, urls;
 ALTER TABLE wish_list ADD COLUMN date_time TIMESTAMP DEFAULT NULL;
 ALTER TABLE black_list ADD COLUMN date_time TIMESTAMP DEFAULT NULL;
 ALTER TABLE urls ADD CONSTRAINT domain UNIQUE USING INDEX domain;
 ALTER TABLE urls ADD COLUMN wpt_id VARCHAR(255) UNIQUE NOT NULL;
+ALTER TABLE urls ADD COLUMN  date_time TIMESTAMP DEFAULT NULL;
 ALTER TABLE urls DROP COLUMN wpt_id;
+
+ALTER TABLE urls ALTER COLUMN url TYPE VARCHAR(4096);
+SELECT load_log_id FROM load_log WHERE date = '2019-03-08';
