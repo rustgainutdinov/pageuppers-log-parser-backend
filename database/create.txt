@@ -88,6 +88,7 @@ INSERT INTO access_rights(access_rights_id, access_right) VALUES ('e7a1ad57-f885
 INSERT INTO users(access_rights_id, name, last_name, email, pass, auth_token) VALUES ('e7a1ad57-f885-4143-99cc-7b99f0a97d7b', 'Rustam', 'Gainutdonov', 'email@mail.com', 'sha1$864ee86d$1$2cf4bbeba889addf708bc12807702777db9195b4', 'ff874805-f05e-45c9-b9e5-2c2d6ff8c20f')
 
 DROP TABLE status, status_type, black_list, wish_list, urls, load_log, domains;
+DROP TABLE black_list, wish_list, urls, domains;
 DELETE FROM domains, urls;
 ALTER TABLE wish_list ADD COLUMN date_time TIMESTAMP DEFAULT NULL;
 ALTER TABLE black_list ADD COLUMN date_time TIMESTAMP DEFAULT NULL;

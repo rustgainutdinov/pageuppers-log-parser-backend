@@ -1,6 +1,6 @@
 const database = require(`${__dirname}/../../database`);
 const User = require(`${__dirname}/../../models/user`);
-const parse = require(`${__dirname}/../../parse/logs`);
+const parse = require(`${__dirname}/../../parse/load-logs`);
 
 function getDateAgo(date, days) {
 	date.setDate(date.getDate() + days);
