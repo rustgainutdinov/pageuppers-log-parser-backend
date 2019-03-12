@@ -1,4 +1,4 @@
-const parse = require(`${__dirname}/../../parse/url`);
+const parse = require(`${__dirname}/../../parse/url-xml`);
 const database = require(`${__dirname}/../../database`);
 const User = require(`${__dirname}/../../models/user`);
 

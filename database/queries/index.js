@@ -1,12 +1,4 @@
 const queries = {
-	'test-select': {
-		sql: `SELECT cdn from urls WHERE wpt_id = '190202_00_67083ef37280f0cb02f1727883c71d70';`,
-		accessRight: 900
-	},
-	'test-insert': {
-		sql: `INSERT INTO users(users_id, name, last_name, email, pass) VALUES('382f6fdf-33a6-467b-89aa-62320d563be7', 'name', 'last_name', 'email', 'pass');`,
-		accessRight: 900
-	},
 	'create-user': {
 		sql:
 			`INSERT INTO 
@@ -71,7 +63,7 @@ const queries = {
 	},
 	'update-url': {
 		sql: `UPDATE urls
-      SET load_time = ?(loadTime), ttfb = ?(ttfb), bytes = ?(bytes), cdn = ?(cdn) WHERE wpt_id = ?(wptId)`,
+      SET load_time = ?(loadTime), ttfb = ?(ttfb), bytes = ?(bytes), cdn = ?(cdn), score_cdn = ?(scoreCdn), score_keep_alive = ?(scoreKeepAlive), score_gzip = ?(scoreCompress), score_cache = ?(scoreCache), score_compress = ?(scoreImgCompess) WHERE wpt_id = ?(wptId)`,
 		accessRight: 500
 	},
 	'count-logs': {
@@ -85,9 +77,14 @@ const queries = {
 	'get-urls-by-date': {
 		sql:
 			`SELECT
-      urls_id AS id, domain, url, ip, robot, api, cms, wpt_id as wptId, load_time AS loadTime, ttfb, bytes, http_2 AS http2, location, browser, cdn, date_time, counter
+      urls_id AS id, domain, url, ip, robot, api, cms, wpt_id as wptId, 
+      load_time AS loadTime, ttfb, bytes, http_2 AS http2, location, 
+      browser, cdn, date_time, counter, score_cdn AS scorecdn, score_keep_alive AS scorekeepalive, 
+      score_gzip AS scoregzip, score_cache AS scorecache, score_compress AS scorecompress, domains.domains_id,
+      status_type_id as statusTypeId, status_id AS statusId
       FROM urls
       INNER JOIN domains ON domains.domains_id = urls.domains_id
+      LEFT JOIN status ON status.domains_id = urls.domains_id
       WHERE date_time >= ?(startDate) AND date_time < ?(endDate)`,
 		accessRight: 500
 	},
@@ -127,6 +124,21 @@ const queries = {
 			FROM 
 			load_log
 			WHERE date =?(date)`
+	},
+	'set-status': {
+		sql:
+			`INSERT
+			INTO status
+			(status_type_id, users_id, domains_id)
+			VALUES 
+			(?(statusTypeId), ?(usersId), ?(domainsId))`
+	},
+	'update-status': {
+		sql:
+			`UPDATE
+			 status
+			 SET status_type_id = ?(statusTypeId), users_id = ?(usersId) 
+			 WHERE status_id = ?(statusId)`
 	}
 };
 

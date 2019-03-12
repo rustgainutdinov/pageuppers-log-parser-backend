@@ -13,6 +13,8 @@ function getDomainId(domain, cb) {
 			domainsId = id;
 			database.execute('insert-domain', {domainsId: id, domain}, null, err => {
 				if (err) return cb(err);
+				database.execute('set-status', {domainsId: id, statusTypeId: 'ea38a26b477b4db29906abc0a18f32ea'}, null, err => {
+				});
 				cb(null, domainsId, domain);
 			});
 		} else {

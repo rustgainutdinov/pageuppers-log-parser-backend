@@ -34,6 +34,7 @@ function execute(req, res, next) {
 		database.execute('get-log-load-data', {date: data.date}, accessRight, (err, result) => {
 			if (err) return next(err);
 			if (result.length === 0) {
+				if (!data.date) return next(new Error('error date type'));
 				const wptPath = data.date.replace(/-/ig, '');
 				parse(wptPath, data.date, (err) => {
 					if (err) return next(err);

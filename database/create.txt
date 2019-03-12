@@ -55,7 +55,12 @@ CREATE TABLE urls(
     wpt_id VARCHAR(255) DEFAULT NULL,
     cdn BOOLEAN DEFAULT NULL,
     counter INT DEFAULT 1,
-    api BOOLEAN DEFAULT NULL
+    api BOOLEAN DEFAULT NULL,
+    score_cdn INT DEFAULT -1,
+    score_keep_alive INT DEFAULT -1,
+    score_gzip INT DEFAULT -1,
+    score_cache INT DEFAULT -1,
+    score_compress INT DEFAULT -1
 );
 
 CREATE TABLE wish_list(
@@ -84,6 +89,15 @@ CREATE TABLE status(
 	domains_id UUID references domains(domains_id) DEFAULT NULL
 );
 
+INSERT INTO status_type
+(status_type_id, name)
+VALUES
+('0d513eec19a1400993fb8ecfc5655f22', 'stopped'),
+('ea38a26b477b4db29906abc0a18f32ea', 'empty'),
+('0b582c8e3c9f4a0a8ee78ce8e296a2f8', 'letter send'),
+('a97d9e8c3e2446e0b91fad78872234e0', 'discussing'),
+('8c8143ca4ae04461858463e8dab1216b', 'working');
+
 INSERT INTO access_rights(access_rights_id, access_right) VALUES ('e7a1ad57-f885-4143-99cc-7b99f0a97d7b', '500');
 INSERT INTO users(access_rights_id, name, last_name, email, pass, auth_token) VALUES ('e7a1ad57-f885-4143-99cc-7b99f0a97d7b', 'Rustam', 'Gainutdonov', 'email@mail.com', 'sha1$864ee86d$1$2cf4bbeba889addf708bc12807702777db9195b4', 'ff874805-f05e-45c9-b9e5-2c2d6ff8c20f')
 
@@ -96,6 +110,11 @@ ALTER TABLE urls ADD CONSTRAINT domain UNIQUE USING INDEX domain;
 ALTER TABLE urls ADD COLUMN wpt_id VARCHAR(255) UNIQUE NOT NULL;
 ALTER TABLE urls ADD COLUMN  date_time TIMESTAMP DEFAULT NULL;
 ALTER TABLE urls DROP COLUMN wpt_id;
+ALTER TABLE urls ADD COLUMN score_cdn INT DEFAULT -1,
+                 ADD COLUMN score_keep_alive INT DEFAULT -1,
+                 ADD COLUMN score_gzip INT DEFAULT -1,
+                 ADD COLUMN score_cache INT DEFAULT -1,
+                 ADD COLUMN score_compress INT DEFAULT -1;
 
 ALTER TABLE urls ALTER COLUMN url TYPE VARCHAR(4096);
 SELECT load_log_id FROM load_log WHERE date = '2019-03-08';
