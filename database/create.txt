@@ -34,6 +34,7 @@ CREATE TABLE load_log(
 	date TIMESTAMP DEFAULT NULL,
 	api_tests INT DEFAULT NULL,
 	uniq_tests INT DEFAULT NULL,
+	all_tests INT DEFAULT NULL,
 	total_tests INT DEFAULT NULL
 );
 
@@ -110,7 +111,7 @@ ALTER TABLE urls ADD CONSTRAINT domain UNIQUE USING INDEX domain;
 ALTER TABLE urls ADD COLUMN wpt_id VARCHAR(255) UNIQUE NOT NULL;
 ALTER TABLE urls ADD COLUMN  date_time TIMESTAMP DEFAULT NULL;
 ALTER TABLE urls DROP COLUMN wpt_id;
-ALTER TABLE urls ADD COLUMN score_cdn INT DEFAULT -1,
+
                  ADD COLUMN score_keep_alive INT DEFAULT -1,
                  ADD COLUMN score_gzip INT DEFAULT -1,
                  ADD COLUMN score_cache INT DEFAULT -1,
@@ -120,3 +121,6 @@ ALTER TABLE urls ALTER COLUMN url TYPE VARCHAR(4096);
 SELECT load_log_id FROM load_log WHERE date = '2019-03-08';
 
 http://localhost:3080/register?data={%22email%22:%22rustamikc@mail.ru%22,%22pass%22:%22password123%22,%22name%22:%22Rustam%22,%22lastName%22:%22Gainutdinov%22}&token=03f8e6c4-54c2-425a-9598-fe06ba3ce572
+
+# TO DO:
+ALTER TABLE load_log ADD COLUMN all_tests INT DEFAULT NULL;

@@ -34,9 +34,11 @@ function parseLogs(wptPath, date, cb) {
 			fs.readFile(path, {encoding: 'utf-8'}, (err, data) => {
 				if (err) return console.log(err);
 				let total = 0;
+				let all = 0;
 				let uniq = 0;
 				let api = 0;
 				let sortedByDomain = {};
+				const logId = uuid();
 				data
 				.split(/\n/gi)
 				.map(item => {
@@ -62,25 +64,26 @@ function parseLogs(wptPath, date, cb) {
 					};
 					item[8] ? api++ : api;
 					counter === 1 ? uniq++ : counter === 2 ? uniq-- : counter;
-					total++;
+					counter === 1 ? total++ : total;
+					all++;
 					sortedByDomain[domain][item[4]] = urlData;
 				});
-				let domain;
-				for (domain in sortedByDomain) {
-					getDomainId(domain, (err, domainsId, domain) => {
-						if (err) return;
-						let url;
-						for (url in sortedByDomain[domain]) {
-							total = total + sortedByDomain[domain][url].counter;
-							sortedByDomain[domain][url].domainsId = domainsId;
-							database.execute('insert-url', sortedByDomain[domain][url], null, err => {
-								if (err) return;
-							});
-						}
-					});
-				}
-				database.execute('insert-log', {date, total, api, uniq}, null, err => {
-					if (err) console.log(err)
+
+				database.execute('insert-log', {logId, date, total, api, uniq, all}, null, err => {
+					if (err) return console.log(err);
+					for (let domain in sortedByDomain) {
+						getDomainId(domain, (err, domainsId, domain) => {
+							if (err) return;
+							let url;
+							for (url in sortedByDomain[domain]) {
+								sortedByDomain[domain][url].domainsId = domainsId;
+								sortedByDomain[domain][url].logId = logId;
+								database.execute('insert-url', sortedByDomain[domain][url], null, err => {
+									if (err) return;
+								});
+							}
+						});
+					}
 				});
 			});
 		});
