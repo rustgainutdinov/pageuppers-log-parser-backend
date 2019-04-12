@@ -120,7 +120,7 @@ ALTER TABLE urls DROP COLUMN wpt_id;
 ALTER TABLE urls ALTER COLUMN url TYPE VARCHAR(4096);
 SELECT load_log_id FROM load_log WHERE date = '2019-03-08';
 
-http://localhost:3080/register?data={%22email%22:%22rustamikc@mail.ru%22,%22pass%22:%22password123%22,%22name%22:%22Rustam%22,%22lastName%22:%22Gainutdinov%22}&token=03f8e6c4-54c2-425a-9598-fe06ba3ce572
+http://localhost:3080/register?data={%22email%22:%22rustamikc@mail.ru%22,%22pass%22:%22password123%22,%22name%22:%22Rustam%22,%22lastName%22:%22Gainutdinov%22}&token=535bffa1-4917-493b-b810-d25b7f6f1f64
 
 # TO DO:
 ALTER TABLE load_log ADD COLUMN all_tests INT DEFAULT NULL;

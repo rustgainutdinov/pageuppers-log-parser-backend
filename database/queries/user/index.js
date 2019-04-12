@@ -2,9 +2,9 @@ const userQueries = {
 	'create-user': {
 		sql:
 			`INSERT INTO 
-      users(name, last_name, email, pass, access_rights_id, auth_token, access_rights_id) 
+      users(name, last_name, email, pass, auth_token, access_rights_id) 
       VALUES 
-      (?(name), ?(lastName), ?(email), ?(pass), ?(accessRightsId), ?(authToken), 'e7a1ad57-f885-4143-99cc-7b99f0a97d7b');`,
+      (?(name), ?(lastName), ?(email), ?(pass), ?(authToken), 'e7a1ad57-f885-4143-99cc-7b99f0a97d7b');`,
 		accessRight: 500
 	},
 	'get-users-data-by-token': {
